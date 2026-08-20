@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini Tool Agent Dashboard</title>
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="dashboard">
+    <!-- Sidebar Panel -->
+    <aside class="sidebar">
+        <div class="brand-section">
+            <div class="brand-avatar">
+                <i class="fa-solid fa-robot brand-icon"></i>
+            </div>
+            <span class="brand-title">Gemini Agent</span>
+        </div>
+
+        <!-- Capability section -->
+        <div class="sidebar-section">
+            <h2 class="sidebar-section-title">Registered Tools</h2>
+            <ul class="tool-list">
+                <li class="tool-item">
+                    <div class="tool-header">
+                        <span class="tool-name">add</span>
+                        <div class="tool-status">
+                            <span class="status-indicator"></span>
+                            <span>Active</span>
+                        </div>
+                    </div>
+                    <p class="tool-desc">Calculates equations and computes sums of numbers.</p>
+                </li>
+                <li class="tool-item">
+                    <div class="tool-header">
+                        <span class="tool-name">multiply</span>
+                        <div class="tool-status">
+                            <span class="status-indicator"></span>
+                            <span>Active</span>
+                        </div>
+                    </div>
+                    <p class="tool-desc">Computes multiplications and products of numerical equations.</p>
+                </li>
+                <li class="tool-item">
+                    <div class="tool-header">
+                        <span class="tool-name">product</span>
+                        <div class="tool-status">
+                            <span class="status-indicator"></span>
+                            <span>Active</span>
+                        </div>
+                    </div>
+                    <p class="tool-desc">Retrieves specs, pricing, and category for hardware products.</p>
+                </li>
+                <li class="tool-item">
+                    <div class="tool-header">
+                        <span class="tool-name">weather</span>
+                        <div class="tool-status">
+                            <span class="status-indicator"></span>
+                            <span>Active</span>
+                        </div>
+                    </div>
+                    <p class="tool-desc">Fetches current weather forecasts and conditions for cities.</p>
+                </li>
+            </ul>
+        </div>
+
+        <!-- System Details Section -->
+        <div class="meta-box">
+            <div class="meta-row">
+                <span>Model</span>
+                <span class="meta-val">gemini-3.6-flash</span>
+            </div>
+            <div class="meta-row">
+                <span>Status</span>
+                <span class="meta-val" style="color: var(--success); font-weight: 600;">Online</span>
+            </div>
+            <div class="meta-row">
+                <span>Framework</span>
+                <span class="meta-val">Flask / Python</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Chat Interface Container -->
+    <main class="chat-container">
+        <!-- Top Chat Header -->
+        <header class="chat-header">
+            <div class="chat-agent-info">
+                <div class="agent-avatar">
+                    <i class="fa-solid fa-brain" style="color: white; font-size: 16px;"></i>
+                </div>
+                <div>
+                    <h3 class="agent-title">Gemini Copilot</h3>
+                    <div class="agent-status">Active & Listening</div>
+                </div>
+            </div>
+            <div class="header-actions">
+                <i class="fa-solid fa-circle-nodes" style="color: var(--text-secondary); cursor: pointer;" title="API Connections"></i>
+            </div>
+        </header>
+
+        <!-- Message Panel -->
+        <section id="chat-box">
+            <!-- Greeting Message -->
+            <div class="message-wrapper bot-msg">
+                <div class="msg-avatar">
+                    <i class="fa-solid fa-robot"></i>
+                </div>
+                <div class="msg-bubble">
+                    Hello! I am your AI Copilot powered by Gemini. I can assist you with general knowledge, perform mathematical calculations, or check product information using my registered tools. What can I do for you today?
+                </div>
+            </div>
+        </section>
+
+        <!-- Suggestion Pills -->
+        <div class="suggestions-wrapper">
+            <div class="suggestions-list">
+                <button class="suggestion-pill" onclick="sendSuggestion('Add 124.5 and 87.2')">
+                    <i class="fa-solid fa-plus"></i> Add 124.5 and 87.2
+                </button>
+                <button class="suggestion-pill" onclick="sendSuggestion('Multiply 12 and 15')">
+                    <i class="fa-solid fa-xmark"></i> Multiply 12 by 15
+                </button>
+                <button class="suggestion-pill" onclick="sendSuggestion('Tell me the specs of Samsung S24')">
+                    <i class="fa-solid fa-mobile-screen"></i> Specs of Samsung S24
+                </button>
+                <button class="suggestion-pill" onclick="sendSuggestion('What is the weather in Delhi right now?')">
+                    <i class="fa-solid fa-cloud-sun"></i> Weather in Delhi
+                </button>
+            </div>
+        </div>
+
+        <!-- Text Input Bar -->
+        <div class="chat-input-wrapper">
+            <div class="input-container">
+                <input
+                    type="text"
+                    id="message"
+                    placeholder="Ask anything or request calculations..."
+                    onkeypress="handleKeyPress(event)"
+                    autocomplete="off"
+                />
+                <button class="send-button" onclick="sendMessage()">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+const chatBox = document.getElementById("chat-box");
+const inputField = document.getElementById("message");
+
+function handleKeyPress(event) {
+    if (event.key === "Enter") {
+        sendMessage();
+    }
+}
+
+function sendSuggestion(text) {
+    inputField.value = text;
+    sendMessage();
+}
+
+async function sendMessage() {
+    const text = inputField.value.trim();
+    if (!text) return;
+
+    // Append User Message
+    chatBox.innerHTML += `
+        <div class="message-wrapper user-msg">
+            <div class="msg-avatar">
+                <i class="fa-solid fa-user"></i>
+            </div>
+            <div class="msg-bubble">
+                ${escapeHTML(text)}
+            </div>
+        </div>
+    `;
+
+    inputField.value = "";
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    // Append Thinking Skeleton Loader
+    const loaderId = "loader-" + Date.now();
+    chatBox.innerHTML += `
+        <div class="message-wrapper bot-msg" id="${loaderId}">
+            <div class="msg-avatar">
+                <i class="fa-solid fa-robot"></i>
+            </div>
+            <div class="msg-bubble">
+                <div class="tool-pill-executing">
+                    <i class="fa-solid fa-gear tool-loader-icon"></i>
+                    Thinking / checking tools...
+                </div>
+            </div>
+        </div>
+    `;
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    try {
+        const response = await fetch("/chat", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ message: text })
+        });
+
+        const data = await response.json();
+        
+        // Remove Loader
+        const loaderElement = document.getElementById(loaderId);
+        if (loaderElement) {
+            loaderElement.remove();
+        }
+
+        // Append Bot Reply
+        chatBox.innerHTML += `
+            <div class="message-wrapper bot-msg">
+                <div class="msg-avatar">
+                    <i class="fa-solid fa-robot"></i>
+                </div>
+                <div class="msg-bubble">
+                    ${escapeHTML(data.reply)}
+                </div>
+            </div>
+        `;
+    } catch (error) {
+        // Remove Loader
+        const loaderElement = document.getElementById(loaderId);
+        if (loaderElement) {
+            loaderElement.remove();
+        }
+
+        // Append Error Message
+        chatBox.innerHTML += `
+            <div class="message-wrapper bot-msg">
+                <div class="msg-avatar" style="background-color: var(--warning);">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <div class="msg-bubble" style="border-color: var(--warning); background-color: rgba(245, 158, 11, 0.05);">
+                    Unable to connect to the assistant server. Please check your network.
+                </div>
+            </div>
+        `;
+    }
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function escapeHTML(str) {
+    return str.replace(/[&<>'"]/g, 
+        tag => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            "'": '&#39;',
+            '"': '&quot;'
+        }[tag] || tag)
+    );
+}
+</script>
+
+</body>
+</html>
