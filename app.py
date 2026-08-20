@@ -34,7 +34,7 @@ def add(a: float, b: float) -> dict:
         a: The first number.
         b: The second number.
     """
-    print(f"\n🔧 TOOL CALLED: add ({a} + {b})")
+    print(f"\n[TOOL CALL] add ({a} + {b})")
     result = a + b
     return {
         "operation": "addition",
@@ -55,7 +55,7 @@ def multiply(a: float, b: float) -> dict:
         a: The first number.
         b: The second number.
     """
-    print(f"\n🔧 TOOL CALLED: multiply ({a} * {b})")
+    print(f"\n[TOOL CALL] multiply ({a} * {b})")
     result = a * b
     return {
         "operation": "multiplication",
@@ -75,7 +75,7 @@ def product(product_name: str) -> dict:
     Args:
         product_name: The name of the product (e.g., 'iphone 15', 'samsung s24', 'macbook air').
     """
-    print(f"\n🔧 TOOL CALLED: product ({product_name})")
+    print(f"\n[TOOL CALL] product ({product_name})")
     products = {
         "iphone 15": {
             "name": "iPhone 15",
@@ -114,7 +114,7 @@ def weather(city: str) -> dict:
     Args:
         city: The name of the city (e.g., 'mumbai', 'delhi', 'london', 'new york', 'tokyo').
     """
-    print(f"\n🔧 TOOL CALLED: weather ({city})")
+    print(f"\n[TOOL CALL] weather ({city})")
     weather_data = {
         "mumbai": {
             "city": "Mumbai",
